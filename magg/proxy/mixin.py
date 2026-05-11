@@ -220,7 +220,7 @@ class ProxyMCP:
         async with client:
             if capability_type == "tool":
                 result = await client.call_tool(path, args)  # Returns list[TextContent | ImageContent | EmbeddedResource]
-                result = [annotate_content(item, **annotations) for item in result]
+                result = [annotate_content(item, **annotations) for item in result.content]
 
             elif capability_type == "resource":
                 # For resources, the 'path' is the URI
