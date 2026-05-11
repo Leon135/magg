@@ -8,7 +8,7 @@ import jwt
 from cryptography.hazmat.backends import default_backend
 from cryptography.hazmat.primitives import serialization
 from cryptography.hazmat.primitives.asymmetric import rsa
-from fastmcp.server.auth import BearerAuthProvider
+from fastmcp.server.auth.providers.jwt import JWTVerifier
 
 from .settings import BearerAuthConfig
 
@@ -138,11 +138,11 @@ class BearerAuthManager:
         return self._private_key
 
     @cached_property
-    def provider(self) -> BearerAuthProvider:
-        """Get the FastMCP BearerAuthProvider for server authentication.
+    def provider(self) -> JWTVerifier:
+        """Get the FastMCP JWTVerifier for server authentication.
 
         Returns:
-            BearerAuthProvider instance
+            JWTVerifier instance
 
         Raises:
             RuntimeError: If authentication is not enabled or keys cannot be loaded
@@ -152,7 +152,7 @@ class BearerAuthManager:
 
         self.load_keys()
 
-        return BearerAuthProvider(
+        return JWTVerifier(
             public_key=self._public_key,
             issuer=self.bearer_config.issuer,
             audience=self.bearer_config.audience
